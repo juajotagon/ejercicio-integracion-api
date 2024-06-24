@@ -3,6 +3,9 @@ Este repositorio esta dirigido a la resolucion del ejercicio de Ingeniero de Int
 
 Tenemos dos APIs, de donde provienen los datos que es la API A y a donde van los datos que es la API B.
 
+![diagrama de flujo](https://github.com/juajotagon/ejercicio-integracion-api/assets/89799661/c2ee2d4e-99af-4b7e-b73f-e0f031e206b9)
+
+
 ## Api A
 
 La Api A utiliza Oauth 2.0 con credenciales obtenidas del cliente. Como parametros de entrada, se facilita una ventana de tiempo donde se desea que se produzca la query.
@@ -165,6 +168,22 @@ components:
 # Integracion de las APIs.
 
 Una vez quedan definidas cada una de las API, lo que toca ahora es realizar un middleware que nos convierta del formato A al formato B. Esta funcion de python puede encargarse, cogiendo cada una de las posibles facturas y transformandolo al formato de apiB.
+
+## Conexion de datos.
+
+Puesto que las dos APIs tienen diferentes nombres de los campos, deben de ser transferidos para su correcto funcionamiento.
+
+Analizando la estructura de los datos, vemos que los valores de cada uno de los campos (string, float, formato de fecha) son iguales para ambas APIs. A excepción de el campo status cuyo valor afecta cambia entre español o inglés, por lo que habría que considerarlo.
+
+```
+facturas --> invoices
+id --> invoices_id
+cliente --> customer
+monto --> amount
+fecha_emision --> date_issued
+estado --> status (cambiar valor de pagado/sin pagar a paid/unpaid)
+```
+El código de esta transformación en Python sería el siguiente:
 
 ```python
 def transform_facturas(facturas):
